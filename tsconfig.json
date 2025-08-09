@@ -1,0 +1,57 @@
+{
+	// Visit https://aka.ms/tsconfig to read more about this file
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "NodeNext",
+		"esModuleInterop": true,
+		// "moduleDetection": "force",
+		"skipLibCheck": true,
+		// "verbatimModuleSyntax": true,
+		// "isolatedModules": true,
+		// "allowJs": true,
+		// "resolveJsonModule": true,
+		"moduleResolution": "NodeNext",
+		// "allowSyntheticDefaultImports": true,
+		"sourceMap": true,
+
+		// File Layout
+		"rootDir": "./src",
+		"outDir": "./dist", //javascript code will be generated/outputted to
+
+		// Environment Settings
+		// See also https://aka.ms/tsconfig/module
+
+		// "types": [],
+		// For nodejs:
+		// "lib": ["esnext"],
+
+		// and npm install -D @types/node
+
+		// Other Outputs
+
+		// "declaration": true,
+		// "declarationMap": true,
+
+		// Strict Typechecking Options
+		"strict": true,
+		// "noUncheckedIndexedAccess": true,
+		// "exactOptionalPropertyTypes": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"allowUnreachableCode": false,
+
+		// Style Options
+		"noImplicitReturns": true,
+		"noImplicitOverride": true,
+		// "noUnusedLocals": true,
+		// "noUnusedParameters": true,
+		// "noFallthroughCasesInSwitch": true,
+		// "noPropertyAccessFromIndexSignature": true,
+		// Recommended Options
+		// "noUncheckedSideEffectImports": true,
+		"types": ["node"],
+		"lib": ["ESNext"]
+	},
+	"include": ["src/**/*.ts", "types/**/*.ts", "types/**/*.d.ts"],
+	"exclude": ["node_modules", "dist"]
+}

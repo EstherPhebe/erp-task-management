@@ -1,0 +1,26 @@
+model Role {
+    id          Int @id @default(autoincrement())
+    role        String
+    permissions String[]
+    user_roles   UserRole[]
+
+    createdAt   DateTime @default(now()) @map("created_at")
+    updatedAt   DateTime @updatedAt @map("updated_at")
+
+    @@map("roles") 
+    
+}
+
+model UserRole {
+    userId  Int @id
+    roleId  Int
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    role Role @relation(fields: [roleId], references: [id])
+
+    @@map("userroles")
+}
+
+
+
+
+
