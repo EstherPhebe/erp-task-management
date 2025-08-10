@@ -1,11 +1,6 @@
 import { User } from "@prisma/client";
 import prisma from "../config/database.js";
-
-type Register = {
-  name: string;
-  email: string;
-  password: string;
-};
+import { Register } from "../types/index.js";
 
 export async function register(details: Register) {
   //get default role with minimal permission

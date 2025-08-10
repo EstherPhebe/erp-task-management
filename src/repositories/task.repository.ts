@@ -1,8 +1,9 @@
-import { Task } from "@prisma/client";
+import { Prisma, Task } from "@prisma/client";
 import prisma from "../config/database.js";
+import { TaskFilter, CreatedTask } from "../types/index.js";
 
 //create a task - set interface for data
-export async function createTask(data): Promise<Task> {
+export async function newTask(data: CreatedTask): Promise<Task> {
   const task = await prisma.task.create({
     data: {
       ...data,
@@ -12,7 +13,35 @@ export async function createTask(data): Promise<Task> {
 }
 
 //get all tasks - filter by assigned, status
-export async function getTaskWithFilters(params: type) {}
+export async function getTaskWithFilters(
+  data: TaskFilter,
+  page: number,
+  limit: number
+): Promise<Task[]> {
+  const where: Prisma.TaskWhereInput = {};
+  if (data.status !== undefined) {
+    where.status = data.status;
+  }
+
+  if (data.assignedId !== undefined) {
+    where.assignedId = data.assignedId;
+  }
+  return prisma.task.findMany({
+    where,
+    skip: page,
+    take: limit,
+    orderBy: { createdAt: "desc" },
+  });
+}
+
+//get task by id
+export async function getSingleTask(id: number): Promise<Task | null> {
+  return await prisma.task.findUnique({
+    where: {
+      id,
+    },
+  });
+}
 
 //update task/tasks status - check (task.update, task.complete)
 export async function updateTask(

@@ -33,6 +33,7 @@ export const registerUser = async (
       .status(201)
       .json({ success: true, message: "Sign in successful" });
   } catch (error) {
+    console.error(error);
     return new Exception(500, "Server Error");
   }
 };
@@ -66,6 +67,7 @@ export const logIn = async (req: Request, res: Response) => {
       .status(200)
       .json({ success: true, message: "Logged in" });
   } catch (error) {
+    console.error(error);
     return new Exception(500, "Server Error");
   }
 };
