@@ -3,11 +3,14 @@ model Task {
     title       String @db.VarChar(250)
     description String? 
     status      Status @default(PENDING)
-    user        User @relation(fields: [userId], references: [id])
-    userId      Int @unique
+    created     User @relation("CreatedTasks", fields: [createdId], references: [id])
+    assigned    User @relation("AssignedTasks",fields: [assignedId], references: [id])
+    
+    createdId   Int 
+    assignedId  Int
 
     createdAt   DateTime @default(now()) @map("created_at")
-    updatedAt   DateTime @updatedAt @map("updated_at")
+    updatedAt   DateTime? @updatedAt @map("updated_at")
 
     @@map("tasks")
 }

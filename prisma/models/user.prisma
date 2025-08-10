@@ -1,11 +1,12 @@
 model User {
-    id          Int @id @default(autoincrement())
-    email       String @unique
-    name        String
-    password    String
-    tasks       Task[]
-    user_role   UserRole?
-    createdAt   DateTime @default(now()) @map("created_at")
+    id              Int @id @default(autoincrement())
+    email           String @unique
+    name            String
+    password        String
+    created_tasks   Task[] @relation("CreatedTasks")
+    assigned_tasks  Task[] @relation("AssignedTasks")
+    user_role       UserRole?
+    createdAt       DateTime @default(now()) @map("created_at")
 
     @@map("users")
 }

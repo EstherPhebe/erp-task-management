@@ -6,9 +6,27 @@ type Register = {
   password: string;
 };
 
-export async function register(data: Register) {
+export async function register(details: Register) {
+  //get default role with minimal permission
+  const role = await prisma.role.findFirst({
+    where: {
+      role: "viewer",
+    },
+  });
+
+  //create new user with default role
   const newUser = await prisma.user.create({
-    data,
+    data: {
+      ...details,
+      user_role: {
+        create: {
+          roleId: role.id,
+        },
+      },
+    },
+    include: {
+      user_role: true,
+    },
   });
   return newUser;
 }

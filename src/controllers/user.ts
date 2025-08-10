@@ -1,13 +1,13 @@
-import type { Request, Response } from "express";
+import { Request, Response } from "express";
 
 export const getUsers = (request: Request, response: Response) => {
-	response.send("Users");
+  response.send("Users");
 };
 
 export const getUsersById = (request: Request, response: Response) => {
-	response.send("User By Id");
+  response.send("User By Id");
 };
 
 export const CreateUser = (request: Request, response: Response) => {
-	response.send("Users");
+  response.send("Users");
 };

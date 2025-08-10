@@ -8,26 +8,26 @@ import { FlatCompat } from "@eslint/eslintrc";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
-	baseDirectory: __dirname,
-	recommendedConfig: js.configs.recommended,
-	allConfig: js.configs.all,
+  baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
+  allConfig: js.configs.all,
 });
 
 export default defineConfig([
-	{
-		extends: compat.extends(
-			"plugin:prettier/recommended"
-			// "plugin:@typescript-eslint/recommended"
-		),
+  {
+    extends: compat.extends(
+      "plugin:prettier/recommended"
+      // "plugin:@typescript-eslint/recommended"
+    ),
 
-		languageOptions: {
-			parser: tsParser,
-			ecmaVersion: 2022,
-			sourceType: "module",
-		},
+    languageOptions: {
+      // parser: tsParser,
+      ecmaVersion: 2022,
+      sourceType: "module",
+    },
 
-		files: ["src/**/*.ts"],
+    files: ["src/**/*.ts"],
 
-		rules: {},
-	},
+    rules: {},
+  },
 ]);
