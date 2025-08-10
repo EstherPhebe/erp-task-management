@@ -1,9 +1,13 @@
 export class Exception extends Error {
   public statusCode: number;
-  public message: string;
-  public details: string | {} | string[];
+  public override message: string;
+  public details: string | undefined;
 
-  constructor(statusCode: number, message: string, details?: any) {
+  constructor(
+    statusCode: number,
+    message: string,
+    details?: string | undefined
+  ) {
     super(message);
     this.statusCode = statusCode;
     this.message = message;

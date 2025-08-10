@@ -16,18 +16,21 @@ const compat = new FlatCompat({
 export default defineConfig([
   {
     extends: compat.extends(
-      "plugin:prettier/recommended"
-      // "plugin:@typescript-eslint/recommended"
+      "plugin:prettier/recommended",
+      "plugin:@typescript-eslint/recommended"
     ),
 
     languageOptions: {
-      // parser: tsParser,
+      parser: tsParser,
       ecmaVersion: 2022,
       sourceType: "module",
     },
 
     files: ["src/**/*.ts"],
 
-    rules: {},
+    rules: {
+      indent: ["error", 2, { SwitchCase: 1, VariableDeclarator: 1 }],
+      "prettier/prettier": ["error", { useTabs: false }],
+    },
   },
 ]);

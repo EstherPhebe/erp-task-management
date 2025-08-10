@@ -1,19 +1,14 @@
-import type { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { Exception } from "../config/error.js";
 
-export const errorHandler = (
-  err: Error,
-  _req: Request,
-  res: Response,
-  _next: NextFunction
-) => {
-  if (err instanceof Exception) {
-    res.status(err.statusCode).json({
-      message: err.message,
-      details: err.details,
+export const errorHandler = (error: Error, _req: Request, res: Response) => {
+  if (error instanceof Exception) {
+    res.status(error.statusCode).json({
+      message: error.message,
+      details: error.details,
     });
   } else {
-    console.error(err);
+    console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };

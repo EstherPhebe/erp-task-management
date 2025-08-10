@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 import prisma from "../config/database.js";
 
 type Register = {
@@ -31,7 +32,7 @@ export async function register(details: Register) {
   return newUser;
 }
 
-export async function emailExist(email: string) {
+export async function emailExist(email: string): Promise<User | null> {
   return await prisma.user.findUnique({
     where: { email },
   });
