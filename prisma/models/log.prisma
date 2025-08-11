@@ -2,8 +2,8 @@ model Log {
     id           Int @id @default(autoincrement())
     userId       Int @map("user_id")
     user         UserRole @relation("UserAction", fields: [userId], references: [userId])
-    roleId       Int? @map("role_id")
-    role         Role? @relation(fields: [roleId], references: [id])
+    userRole     String? @map("user_role")
+    role         Role? @relation(fields: [userRole], references: [role])
     taskId       Int? @map("task_id")
     task         Task? @relation(fields: [taskId], references: [id])
     action       Action
