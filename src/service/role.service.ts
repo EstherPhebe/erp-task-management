@@ -9,9 +9,9 @@ import { Roles } from "../types/index.js";
 import { createNewLog } from "./log.service.js";
 
 export async function createRole(
-  userId: number,
-  userRole: string,
-  data: Roles
+  data: Roles,
+  creatorRole: string,
+  creatorId: number
 ) {
   const check = await getRole("role", data.role);
   if (check) {
@@ -22,11 +22,11 @@ export async function createRole(
   const role = await newRole(data);
 
   await createNewLog({
-    userId,
-    userRole,
+    userId: creatorId,
+    userRole: creatorRole,
     action: "CREATE",
     value: JSON.stringify(role),
-    information: `${userRole} created new role - ${role.role} with permissions ${role.permissions.join(", ")}`,
+    information: `${creatorRole} created new role - ${role.role} with permissions ${role.permissions.join(", ")}`,
   });
 
   return role;
@@ -53,7 +53,7 @@ export async function editRolePermissions(
     action: "UPDATE",
     prevValue: JSON.stringify(role),
     value: JSON.stringify(updatedRole),
-    information: `Updated role permissions - ${updatedRole.role} with permissions ${updatedRole.permissions.join(", ")}`,
+    information: `${userRole} - Updated role permissions - ${updatedRole.role} with permissions ${updatedRole.permissions.join(", ")}`,
   });
 
   return updatedRole;
@@ -61,8 +61,9 @@ export async function editRolePermissions(
 
 export async function editUserRole(
   userId: number,
-  userRole: string,
-  roleName: string
+  roleName: string,
+  updaterRole: string,
+  updaterId: number
 ) {
   //get previous role
   const role = await currentRole(userId);
@@ -74,12 +75,12 @@ export async function editUserRole(
   const updatedRole = await updateUserRole(userId, roleName);
 
   await createNewLog({
-    userId,
-    userRole,
+    userId: updaterId,
+    userRole: updaterRole,
     action: "UPDATE",
     prevValue: JSON.stringify(role),
     value: JSON.stringify(updatedRole),
-    information: `Updated role - From ${role.role.role} to ${updatedRole.role.role}`,
+    information: `${updaterRole} Updated role - From ${role.role.role} to ${updatedRole.role.role}`,
   });
 
   return updatedRole;

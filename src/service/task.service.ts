@@ -17,7 +17,22 @@ export async function updateTaskById(
     throw new Error("Task not found");
   }
 
-  const updatedTask = await updateOneTask(taskId, updates);
+  const data = {
+    ...(!updates.title &&
+      updates.title !== task.title && { title: updates.title }),
+    ...(!updates.status &&
+      updates.status !== task.status && { status: updates.status }),
+    ...(!updates.description &&
+      updates.description !== task.description && {
+        description: updates.description,
+      }),
+    ...(!updates.assignedId &&
+      updates.assignedId !== task.assignedId && {
+        assignedId: updates.assignedId,
+      }),
+  };
+
+  const updatedTask = await updateOneTask(taskId, data);
 
   await createNewLog({
     userId,

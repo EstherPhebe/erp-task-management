@@ -5,9 +5,14 @@ import {
   getTaskWithFilters,
 } from "../repositories/task.repository.js";
 import { TaskFilter, TaskQueryParams } from "../types/index.js";
-import { createTask, deleteTaskById } from "../service/task.service.js";
+import {
+  createTask,
+  deleteTaskById,
+  updateTaskById,
+} from "../service/task.service.js";
+import { checkRole } from "../utils/utils.js";
+import { getUser } from "../repositories/user.repository.js";
 
-//create a task
 export async function getTasks(
   req: Request,
   res: Response,
@@ -71,7 +76,6 @@ export async function createNewTask(
   }
 }
 
-//Get task
 export async function getTaskById(
   req: Request,
   res: Response,
@@ -99,6 +103,41 @@ export async function getTaskById(
 }
 
 //update tasks status - check (task.update, task.complete)
+export async function updateTask(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const { id } = req.params;
+  const body = req.body;
+  try {
+    const user = req.user!;
+
+    if (!checkRole(user, ["admin", "manager", "lead"], next)) {
+      return;
+    }
+
+    if (body.assignedId) {
+      const assigned = await getUser(body.assignedId);
+
+      if (!assigned) {
+        throw new Exception(
+          404,
+          `Cannot assign task, user ID-${body.assignedId} does not exist`
+        );
+      }
+    }
+
+    const update = updateTaskById(parseInt(id), user.userId, body);
+    return res.status(200).json({
+      success: true,
+      ...update,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new Exception(500, "Cannot Update", "UPDATE_ERROR"));
+  }
+}
 
 //Delete Tasks
 export async function deleteTask(

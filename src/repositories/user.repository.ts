@@ -1,5 +1,24 @@
-//get all users
+import { User } from "@prisma/client";
+import prisma from "../config/database.js";
 
-//delate a user
+//get user
+export async function getUser(id: number): Promise<User | null> {
+  return await prisma.user.findUnique({
+    where: {
+      id,
+    },
+  });
+}
 
-//get user profile
+export async function getallUsersWithRoles() {
+  return await prisma.userRole.findMany({
+    include: {
+      user: {
+        select: {
+          email: true,
+          name: true,
+        },
+      },
+    },
+  });
+}

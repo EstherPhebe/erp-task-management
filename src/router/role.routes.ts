@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { getUsers } from "../controllers/user.js";
 import { authenticate } from "../middleware/authenticate.middleware.js";
 import { authorize } from "../middleware/authorize.middleware.js";
 import {
@@ -9,8 +8,6 @@ import {
 } from "../controllers/role.controllers.js";
 
 const router = Router();
-
-router.get("/user", authenticate, authorize(["admin"]), getUsers);
 
 router.post("/role", authenticate, authorize(["admin"]), createNewRole);
 

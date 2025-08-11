@@ -12,7 +12,7 @@ export async function getUserLogs(
   try {
     const user = req.user!;
 
-    if (!checkRole(user, "admin", next)) {
+    if (!checkRole(user, ["admin"], next)) {
       return;
     }
     const history = await readUserLogs(parseInt(id), 50);
@@ -32,7 +32,7 @@ export async function getAllLogs(
   try {
     const user = req.user!;
 
-    if (!checkRole(user, "admin", next)) {
+    if (!checkRole(user, ["admin"], next)) {
       return;
     }
     const logs = await readAllLogs(50);

@@ -17,7 +17,7 @@ export async function createNewRole(
   try {
     const user = req.user!;
 
-    if (!checkRole(user, "admin", next)) {
+    if (!checkRole(user, ["admin"], next)) {
       return;
     }
 
@@ -28,7 +28,7 @@ export async function createNewRole(
       ),
     };
 
-    const createdRole = await createRole(user.userId, user.role.role, data);
+    const createdRole = await createRole(data, user.role.role, user.userId);
 
     return res.status(201).json({ success: true, ...createdRole });
   } catch (error) {
@@ -42,20 +42,25 @@ export async function updateUserRole(
   res: Response,
   next: NextFunction
 ) {
-  const { id } = req.body;
-  const { newRole } = req.body;
+  const { id } = req.params;
+  const { role } = req.body;
   try {
     const user = req.user!;
 
-    if (!checkRole(user, "admin", next)) {
+    if (!checkRole(user, ["admin"], next)) {
       return;
     }
 
-    const role = await editUserRole(id, user.role.role, newRole);
+    const newRole = await editUserRole(
+      parseInt(id),
+      role,
+      user.role.role,
+      user.userId
+    );
 
     return res
       .status(200)
-      .json({ success: true, message: "User role updated", ...role.role });
+      .json({ success: true, message: "User role updated", ...newRole.role });
   } catch (error) {
     console.error(error);
     return next(new Exception(500, "Cannot Update Role", "UPDATE_ERROR"));
@@ -72,7 +77,7 @@ export async function updateRolePermission(
   try {
     const user = req.user!;
 
-    if (!checkRole(user, "admin", next)) {
+    if (!checkRole(user, ["admin"], next)) {
       return;
     }
 
