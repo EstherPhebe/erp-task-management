@@ -1,12 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { Exception } from "../config/error.js";
 import {
-  deleteTask,
   getSingleTask,
   getTaskWithFilters,
-  newTask,
 } from "../repositories/task.repository.js";
-import { CreatedTask, TaskFilter, TaskQueryParams } from "../types/index.js";
+import { TaskFilter, TaskQueryParams } from "../types/index.js";
+import { createTask, deleteTaskById } from "../service/task.service.js";
 
 //create a task
 export async function getTasks(
@@ -42,20 +41,21 @@ export async function getTasks(
   }
 }
 
-//get all tasks - filter by assigned, status
-export async function createTask(
+export async function createNewTask(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   const { title, description } = req.body;
   try {
-    await newTask({
+    const data = {
       title,
       description,
       assignedId: req.user.userId,
       createdId: req.user.userId,
-    });
+    };
+
+    await createTask(req.user.userId, data);
 
     return res.status(201).json({ success: true, message: "New Task Created" });
   } catch (error) {
@@ -85,13 +85,16 @@ export async function getTaskById(
     }
 
     return res.status(200).json({ success: true, ...task });
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+    return next(new Exception(500, "Cannot fetch tasks", "FETCH_ERROR"));
+  }
 }
 
 //update tasks status - check (task.update, task.complete)
 
 //Delete Tasks
-export async function deleteTaskById(
+export async function deleteTask(
   req: Request,
   res: Response,
   next: NextFunction
@@ -105,12 +108,8 @@ export async function deleteTaskById(
         new Exception(401, "Authentication Required", "UNAUTHORIZED")
       );
     }
-    const task = await getSingleTask(parseInt(id));
-    if (!task) {
-      return next(new Exception(404, "Task not found", "NOT_FOUND"));
-    }
-    await deleteTask(parseInt(id));
-    //log deletion -task - id, del by-user, task title
+
+    await deleteTaskById(parseInt(id), user);
     return res.status(200).json({ success: true, message: "Task Deleted" });
   } catch (error) {
     console.error(error);

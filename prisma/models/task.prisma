@@ -4,10 +4,10 @@ model Task {
     description String? 
     status      Status @default(PENDING)
     created     User @relation("CreatedTasks", fields: [createdId], references: [id])
-    assigned    User @relation("AssignedTasks",fields: [assignedId], references: [id])
-    
-    createdId   Int 
-    assignedId  Int
+    assigned    User @relation("AssignedTasks",fields: [assignedId], references: [id])  
+    createdId   Int @map("created_id")
+    assignedId  Int @map("assigned_id")
+    log         Log[]
 
     createdAt   DateTime @default(now()) @map("created_at")
     updatedAt   DateTime? @updatedAt @map("updated_at")

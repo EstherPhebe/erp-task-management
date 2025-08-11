@@ -44,7 +44,7 @@ export async function getSingleTask(id: number): Promise<Task | null> {
 }
 
 //update task/tasks status - check (task.update, task.complete)
-export async function updateTask(
+export async function updateOneTask(
   id: number,
   updateValue: Record<string, string | number>
 ): Promise<Task> {

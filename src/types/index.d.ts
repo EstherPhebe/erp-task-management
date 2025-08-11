@@ -25,3 +25,13 @@ export type Register = {
   email: string;
   password: string;
 };
+
+export interface LogData {
+  userId: number;
+  taskId?: number;
+  action: "CREATE" | "UPDATE" | "DELETE";
+  changedField?: string;
+  prevValue?: any;
+  value?: any;
+  information: string;
+}

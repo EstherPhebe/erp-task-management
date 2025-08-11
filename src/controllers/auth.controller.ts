@@ -4,7 +4,7 @@ import {
   hashPassword,
   verifyPassword,
   getToken,
-} from "../helpers/auth.helper.js";
+} from "../service/auth.service.js";
 import { emailExist, register } from "../repositories/auth.repository.js";
 
 export const registerUser = async (
