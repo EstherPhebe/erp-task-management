@@ -38,24 +38,32 @@ export const registerUser = async (
   }
 };
 
-export const logIn = async (req: Request, res: Response) => {
+export const logIn = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { email, password } = req.body;
   try {
     const user = await emailExist(email);
     if (!user) {
-      return new Exception(
-        401,
-        "Invalid Username or Password",
-        "INVALID_CREDENTIALS"
+      return next(
+        new Exception(
+          401,
+          "Invalid Username or Password",
+          "INVALID_CREDENTIALS"
+        )
       );
     }
 
     const verify = await verifyPassword(password, user.password);
     if (!verify) {
-      return new Exception(
-        401,
-        "Invalid Username or Password",
-        "INVALID_CREDENTIALS"
+      return next(
+        new Exception(
+          401,
+          "Invalid Username or Password",
+          "INVALID_CREDENTIALS"
+        )
       );
     }
     const token = getToken(user.id);
@@ -68,6 +76,6 @@ export const logIn = async (req: Request, res: Response) => {
       .json({ success: true, message: "Logged in" });
   } catch (error) {
     console.error(error);
-    return new Exception(500, "Server Error");
+    return next(new Exception(500, "Server Error"));
   }
 };

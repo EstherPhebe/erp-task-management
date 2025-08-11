@@ -6,6 +6,7 @@ import {
   editRolePermissions,
   editUserRole,
 } from "../service/role.service.js";
+import { checkRole } from "../utils/utils.js";
 
 export async function createNewRole(
   req: Request,
@@ -14,16 +15,10 @@ export async function createNewRole(
 ) {
   const { role, permissions }: Roles = req.body;
   try {
-    const user = req.user;
+    const user = req.user!;
 
-    if (!user) {
-      return next(
-        new Exception(401, "Authentication Required", "UNAUTHORIZED")
-      );
-    } else if (user.role.role === "admin") {
-      return next(
-        new Exception(401, "Insufficient Permissions", "UNAUTHORIZED")
-      );
+    if (!checkRole(user, "admin", next)) {
+      return;
     }
 
     const data = {
@@ -50,16 +45,10 @@ export async function updateUserRole(
   const { id } = req.body;
   const { newRole } = req.body;
   try {
-    const user = req.user;
+    const user = req.user!;
 
-    if (!user) {
-      return next(
-        new Exception(401, "Authentication Required", "UNAUTHORIZED")
-      );
-    } else if (user.role.role === "admin") {
-      return next(
-        new Exception(401, "Insufficient Permissions", "UNAUTHORIZED")
-      );
+    if (!checkRole(user, "admin", next)) {
+      return;
     }
 
     const role = await editUserRole(id, user.role.role, newRole);
@@ -81,16 +70,10 @@ export async function updateRolePermission(
   const { id } = req.params;
   const permissions: string[] = req.body;
   try {
-    const user = req.user;
+    const user = req.user!;
 
-    if (!user) {
-      return next(
-        new Exception(401, "Authentication Required", "UNAUTHORIZED")
-      );
-    } else if (user.role.role === "admin") {
-      return next(
-        new Exception(401, "Insufficient Permissions", "UNAUTHORIZED")
-      );
+    if (!checkRole(user, "admin", next)) {
+      return;
     }
 
     const data = permissions.filter(

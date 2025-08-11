@@ -37,3 +37,5 @@ router.get(
   authorize(["admin", "manager", "user"]),
   getTaskById
 );
+
+export default router;

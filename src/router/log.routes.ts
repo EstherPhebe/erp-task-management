@@ -8,3 +8,5 @@ const router = Router();
 router.get("/logs", authenticate, authorize(["admin"]), getAllLogs);
 
 router.get("/logs/:id", authenticate, authorize(["admin"]), getUserLogs);
+
+export default router;

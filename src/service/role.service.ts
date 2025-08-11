@@ -13,6 +13,12 @@ export async function createRole(
   userRole: string,
   data: Roles
 ) {
+  const check = await getRole("role", data.role);
+  if (check) {
+    throw new Error(
+      `${check.role} already exist, update permissions or create a different role`
+    );
+  }
   const role = await newRole(data);
 
   await createNewLog({

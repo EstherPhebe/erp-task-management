@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { Exception } from "../config/error.js";
 import { readAllLogs, readUserLogs } from "../service/log.service.js";
+import { checkRole } from "../utils/utils.js";
 
 export async function getUserLogs(
   req: Request,
@@ -9,16 +10,10 @@ export async function getUserLogs(
 ) {
   const { id } = req.params;
   try {
-    const user = req.user;
+    const user = req.user!;
 
-    if (!user) {
-      return next(
-        new Exception(401, "Authentication Required", "UNAUTHORIZED")
-      );
-    } else if (user.role.role === "admin") {
-      return next(
-        new Exception(401, "Insufficient Permissions", "UNAUTHORIZED")
-      );
+    if (!checkRole(user, "admin", next)) {
+      return;
     }
     const history = await readUserLogs(parseInt(id), 50);
 
@@ -35,16 +30,10 @@ export async function getAllLogs(
   next: NextFunction
 ) {
   try {
-    const user = req.user;
+    const user = req.user!;
 
-    if (!user) {
-      return next(
-        new Exception(401, "Authentication Required", "UNAUTHORIZED")
-      );
-    } else if (user.role.role === "admin") {
-      return next(
-        new Exception(401, "Insufficient Permissions", "UNAUTHORIZED")
-      );
+    if (!checkRole(user, "admin", next)) {
+      return;
     }
     const logs = await readAllLogs(50);
 
