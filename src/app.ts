@@ -4,6 +4,8 @@ import roleRouter from "./router/role.routes.js";
 import authRouter from "./router/auth.routes.js";
 import taskRouter from "./router/task.routes.js";
 import logRouter from "./router/log.routes.js";
+import "dotenv/config";
+const env = process.env;
 
 import { errorHandler } from "./middleware/errorhandler.middleware.js";
 
@@ -14,11 +16,7 @@ app.use(express.json());
 app.use("/api/v1", roleRouter, taskRouter, logRouter);
 app.use("/auth", authRouter);
 
-const PORT = 3030;
-
-// app.get("/health", (_req: Request, res: Response) => {
-//   res.status(200).json({ status: "ok", time: new Date().toISOString() });
-// });
+const PORT = env.PORT || 3000;
 
 app.use(errorHandler);
 
