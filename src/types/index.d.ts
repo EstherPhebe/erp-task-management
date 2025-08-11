@@ -37,6 +37,7 @@ export type Register = {
 export interface LogData {
   userId: number;
   taskId?: number;
+  userRole?: string;
   action: "CREATE" | "UPDATE" | "DELETE";
   changedField?: string;
   prevValue?: any;
@@ -50,4 +51,9 @@ type UserRoles = {
   createdAt: Date;
   updatedAt?: Date | null;
   role: Role;
+};
+
+type Roles = {
+  role: string;
+  permissions: string[];
 };

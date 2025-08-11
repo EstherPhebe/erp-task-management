@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { Exception } from "../config/error.js";
-import { currentRole } from "../repositories/roles.repository.js";
+import { currentRole } from "../repositories/role.repository.js";
 import "dotenv/config";
 const env = process.env;
 

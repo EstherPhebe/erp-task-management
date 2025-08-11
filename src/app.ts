@@ -1,5 +1,5 @@
 import express from "express";
-import userRouter from "./router/user.js";
+import userRouter from "./router/role.routes.js";
 import authRoutes from "./router/auth.routes.js";
 import { errorHandler } from "./middleware/errorhandler.js";
 

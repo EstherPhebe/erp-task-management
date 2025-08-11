@@ -1,5 +1,9 @@
 import { Log } from "@prisma/client";
-import { addNewLogs, getUserLogs } from "../repositories/log.repository.js";
+import {
+  addNewLogs,
+  getAllLogs,
+  getUserLogs,
+} from "../repositories/log.repository.js";
 import { LogData } from "../types/index.js";
 
 export async function createNewLog(log: LogData) {
@@ -24,6 +28,15 @@ export async function readUserLogs(
 ): Promise<Log[] | null> {
   try {
     return await getUserLogs(id, limit);
+  } catch (error) {
+    console.error(error, "Failed to fetch Logs");
+    return null;
+  }
+}
+
+export async function readAllLogs(limit: number = 50): Promise<Log[] | null> {
+  try {
+    return await getAllLogs(limit);
   } catch (error) {
     console.error(error, "Failed to fetch Logs");
     return null;

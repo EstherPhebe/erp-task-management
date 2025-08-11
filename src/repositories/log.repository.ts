@@ -22,3 +22,10 @@ export async function getUserLogs(
     take: limit,
   });
 }
+
+export async function getAllLogs(limit: number = 100): Promise<Log[]> {
+  return await prisma.log.findMany({
+    orderBy: { created_at: "desc" },
+    take: limit,
+  });
+}

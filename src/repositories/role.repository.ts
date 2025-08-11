@@ -1,17 +1,26 @@
-import { Role, UserRole } from "@prisma/client";
+import { Role } from "@prisma/client";
+import { Roles, UserRoles } from "../types/index.js";
 import prisma from "../config/database.js";
 
-type Roles = {
-  role: string;
-  permissions: string[];
-};
+//get single role by id or name
+export async function getRole(field: string, value: string | number) {
+  return await prisma.role.findFirst({
+    where: {
+      [field]: value,
+    },
+  });
+}
 
-export async function createRole(data: Roles): Promise<Role> {
+export async function newRole(data: Roles): Promise<Role> {
   const role = await prisma.role.create({ data });
   return role;
 }
 
 //admin can see all roles - getRoles
+export async function allRoles(): Promise<Role[]> {
+  const roles = await prisma.role.findMany();
+  return roles;
+}
 
 //admin can update permissions on roles
 export async function updatePermission(
@@ -41,24 +50,23 @@ export async function deleteRole(id: number): Promise<void> {
 export async function updateUserRole(
   user_id: number,
   role: string
-): Promise<UserRole> {
-  const getRole = await prisma.role.findFirst({
-    where: {
-      role: role,
-    },
-  });
+): Promise<UserRoles> {
+  const prevRole = await getRole("role", role);
 
   return await prisma.userRole.update({
     where: {
       userId: user_id,
     },
     data: {
-      roleId: getRole?.id,
+      roleId: prevRole?.id,
+    },
+    include: {
+      role: true,
     },
   });
 }
 
-export async function currentRole(id: number) {
+export async function currentRole(id: number): Promise<UserRoles | null> {
   const user = await prisma.userRole.findUnique({
     where: {
       userId: id,

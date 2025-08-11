@@ -1,14 +1,14 @@
 model Role {
     id          Int @id @default(autoincrement())
-    role        String
+    role        String @unique
     permissions String[]
     user_roles  UserRole[]
+    log         Log[]
 
     createdAt   DateTime @default(now()) @map("created_at")
     updatedAt   DateTime? @updatedAt @map("updated_at")
 
     @@map("roles") 
-    
 }
 
 model UserRole {
@@ -22,7 +22,6 @@ model UserRole {
 
     @@id([userId, roleId])
     @@map("userroles")
-    
 }
 
 
