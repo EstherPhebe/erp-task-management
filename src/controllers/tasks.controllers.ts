@@ -48,14 +48,21 @@ export async function createNewTask(
 ) {
   const { title, description } = req.body;
   try {
+    const user = req.user?.userId;
+
+    if (!user) {
+      return next(
+        new Exception(401, "Authentication Required", "UNAUTHORIZED")
+      );
+    }
     const data = {
       title,
       description,
-      assignedId: req.user.userId,
-      createdId: req.user.userId,
+      assignedId: user,
+      createdId: user,
     };
 
-    await createTask(req.user.userId, data);
+    await createTask(user, data);
 
     return res.status(201).json({ success: true, message: "New Task Created" });
   } catch (error) {

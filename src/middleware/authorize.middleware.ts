@@ -3,7 +3,14 @@ import { Exception } from "../config/error.js";
 
 export function authorize(roles: string[]) {
   return (req: Request, _res: Response, next: NextFunction) => {
-    const userRole = req.user.role?.role;
+    const user = req.user;
+
+    if (!user) {
+      return next(
+        new Exception(401, "Authentication Required", "UNAUTHORIZED")
+      );
+    }
+    const userRole = user.role?.role;
 
     if (!userRole || !roles.includes(userRole)) {
       return next(

@@ -13,7 +13,7 @@ export async function addNewLogs(log: LogData): Promise<Log> {
 export async function getUserLogs(
   userId: number,
   limit: number
-): Promise<Log[] | null> {
+): Promise<Log[]> {
   return await prisma.log.findMany({
     where: {
       userId,

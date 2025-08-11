@@ -1,3 +1,4 @@
+import { Log } from "@prisma/client";
 import { addNewLogs, getUserLogs } from "../repositories/log.repository.js";
 import { LogData } from "../types/index.js";
 
@@ -17,10 +18,14 @@ export async function createNewLog(log: LogData) {
   }
 }
 
-export async function readUserLogs(id: number, limit: number = 50) {
+export async function readUserLogs(
+  id: number,
+  limit: number = 50
+): Promise<Log[] | null> {
   try {
     return await getUserLogs(id, limit);
   } catch (error) {
     console.error(error, "Failed to fetch Logs");
+    return null;
   }
 }

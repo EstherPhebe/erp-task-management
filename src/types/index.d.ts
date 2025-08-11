@@ -1,4 +1,12 @@
-import { Task } from "@prisma/client";
+import { Role, Task } from "@prisma/client";
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: UserRoles;
+    }
+  }
+}
 
 export interface CreatedTask {
   title: string;
@@ -35,3 +43,11 @@ export interface LogData {
   value?: any;
   information: string;
 }
+
+type UserRoles = {
+  userId: number;
+  roleId: number;
+  createdAt: Date;
+  updatedAt?: Date | null;
+  role: Role;
+};
