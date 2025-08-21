@@ -24,8 +24,8 @@ export interface TaskFilter {
 export interface TaskQueryParams {
   status?: Task["status"];
   assigned?: number;
-  pages?: number;
-  limit?: number;
+  pages?: string;
+  limit?: string;
 }
 
 export type Register = {

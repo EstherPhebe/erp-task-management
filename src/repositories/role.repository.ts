@@ -73,6 +73,12 @@ export async function currentRole(id: number): Promise<UserRoles | null> {
     },
     include: {
       role: true,
+      user: {
+        select: {
+          name: true,
+          email: true,
+        },
+      },
     },
   });
   return user;

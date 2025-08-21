@@ -27,7 +27,7 @@ router.delete(
 router.get(
   "/task",
   authenticate,
-  authorize(["admin", "manager, user"]),
+  authorize(["admin", "manager", "user"]),
   getTasks
 );
 

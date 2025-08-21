@@ -21,8 +21,8 @@ export async function getTasks(
   const {
     status,
     assigned,
-    pages = 1,
-    limit = 25,
+    pages = "1",
+    limit = "25",
   }: TaskQueryParams = req.query;
   try {
     const filter: TaskFilter = {};
@@ -31,14 +31,17 @@ export async function getTasks(
       filter.assignedId = assigned;
     }
 
-    if (pages < 1 || isNaN(pages)) {
+    const page = parseInt(pages);
+    const limits = parseInt(limit);
+
+    if (page < 1 || isNaN(page)) {
       return res.status(400).json({ Error: "Invalid Page Number" });
     }
-    if (limit < 1 || limit > 50 || isNaN(limit)) {
+    if (limits < 1 || limits > 50 || isNaN(limits)) {
       return res.status(400).json({ Error: "Invalid Limit" });
     }
 
-    const tasks = await getTaskWithFilters(filter, pages, limit);
+    const tasks = await getTaskWithFilters(filter, page, limits);
     return res.status(200).json({ success: true, ...tasks });
   } catch (error) {
     console.error(error);

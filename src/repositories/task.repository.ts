@@ -28,7 +28,7 @@ export async function getTaskWithFilters(
   }
   return prisma.task.findMany({
     where,
-    skip: page,
+    skip: (page - 1) * limit,
     take: limit,
     orderBy: { createdAt: "desc" },
   });
